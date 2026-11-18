@@ -2,7 +2,7 @@
 var empty='<div class="empty"><p><b>The first posts are on the way.</b></p><p>Want something useful now? Grab the free Earn Menu printable from our TRUCE kit.</p><a class="btn" href="/free-printable">Get the free printable</a></div>';
 function esc(s){return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/"/g,'&quot;');}
 fetch('/blog/posts').then(function(r){return r.text()}).then(function(t){
-var m=t.match(/"blogPostListing":("(?:[^"\\]|\\.)*")/);var L=m?JSON.parse(JSON.parse(m[1])):{posts:[]};var posts=(L.posts||[]);
+var m=t.match(/"blogPostListing":("(?:[^"\\]|\\.)*")/);var L=m?JSON.parse(JSON.parse(m[1].replace(/\\'/g,"'"))):{posts:[]};var posts=(L.posts||[]);
 if(!posts.length){document.getElementById('sg-posts').innerHTML=empty;return;}
 document.getElementById('sg-posts').innerHTML='<div class="cards">'+posts.map(function(p){var c=(p.categories&&p.categories[0])?'<span class="cat">'+esc(p.categories[0].name)+'</span>':'';
 return '<a class="card" href="'+esc(p.path)+'">'+(p.image?'<img src="'+esc(p.image)+'" alt="" loading="lazy">':'')+'<div class="cb">'+c+'<h2>'+esc(p.name)+'</h2><p>'+esc(p.description)+'</p><span class="more">Read the post</span></div></a>';}).join('')+'</div>';
